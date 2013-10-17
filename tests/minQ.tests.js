@@ -1,6 +1,6 @@
 /*jslint es5:true */
-/*globals document, module, test, ok, equal, deepEqual, DOM */
-(function (document, module, test, ok, equal, DOM) {
+/*globals document, module, test, ok, equal, deepEqual, minQ*/
+(function (document, module, test, ok, equal, $) {
     'use strict';
 
     function givenMarkup(markup) {
@@ -28,12 +28,12 @@
         }
     }
     
-    module("DOM() construction");
+    module("minQ() construction");
     
     test("Should construct from single node object", function () {
         givenMarkup('<div id="myElem"></div>');
         
-        var d = DOM(byId('myElem'));
+        var d = minQ(byId('myElem'));
         
         deepEqual(d.get(), [byId('myElem')]);
     });
@@ -41,7 +41,7 @@
     test("Should construct from single id selector", function () {
         givenMarkup('<div id="item"></div>');
         
-        var d = DOM('#item');
+        var d = minQ('#item');
         
         deepEqual(d.get(), [byId('item')]);
     });
@@ -49,7 +49,7 @@
     test("Should construct from selector returning multiple elements", function () {
         givenMarkup('<div id="item"></div><div id="other"/>');
         
-        var d = DOM('#item, #other');
+        var d = $('#item, #other');
         
         deepEqual(d.get(), [byId('item'), byId('other')]);
     });
@@ -57,98 +57,98 @@
     test("Should remove duplicates from element array", function () {
         givenMarkup('<div id="item"></div><div id="other"/>');
 
-        var d = DOM([byId('item'), byId('item'), byId('item'), byId('other'), byId('other')]);
+        var d = $([byId('item'), byId('item'), byId('item'), byId('other'), byId('other')]);
 
         deepEqual(d.get(), [byId('item'), byId('other')]);
     });
 
-    module('DOM().addClass(className : string)');
+    module('minQ().addClass(className : string)');
     
-    test('DOM().addClass should add a class to classless element', function () {
+    test('minQ().addClass should add a class to classless element', function () {
         givenMarkup('<div id="myElem"></div>');
         
-        DOM('#myElem').addClass('class1');
+        $('#myElem').addClass('class1');
         
         equal('class1', byId('myElem').className);
     });
         
     test('Should append a class name to a dom element when a class already exists', function () {
         givenMarkup('<div id="me" class="anotherClass"></div>');
-        DOM('#me').addClass('someClass');
+        $('#me').addClass('someClass');
         equal('anotherClass someClass', byId('me').className);
     });
         
     test('Should not duplicate class name in class list when adding an existing class', function () {
         givenMarkup('<div id="me" class="someClass anotherClass"></div>');
-        DOM('#me').addClass('someClass');
+        $('#me').addClass('someClass');
         equal('someClass anotherClass', byId('me').className);
     });
     
 
-    module('DOM().removeClass(className : string)');
+    module('minQ().removeClass(className : string)');
     test('Should remove class name from dom element with only one class', function () {
         givenMarkup("<div id='me' class='someClass'></div>");
-        DOM('#me').removeClass('someClass');
+        $('#me').removeClass('someClass');
         equal('', byId('me').className);
     });
     test('Should only remove the specified class from dom element with multiple classes', function () {
         givenMarkup("<div id='me' class='someClass someOtherClass'></div>");
-        DOM('#me').removeClass('someClass');
+        $('#me').removeClass('someClass');
         equal('someOtherClass', byId('me').className);
     });
 
    
-    module('DOM().toggleClass(className : string, [apply : boolean])');
+    module('minQ().toggleClass(className : string, [apply : boolean])');
     test('Should add class name to dom element', function () {
         givenMarkup("<div id='me'></div>");
-        DOM('#me').toggleClass('someClass');
+        $('#me').toggleClass('someClass');
         equal(byId('me').className, 'someClass');
     });
     test('Should remove class name from dom element', function () {
         givenMarkup("<div id='me' class='someClass'></div>");
-        DOM('#me').toggleClass('someClass');
+        $('#me').toggleClass('someClass');
         equal(byId('me').className, '');
     });
     test('Should only remove the specified class from dom element with multiple classes', function () {
         givenMarkup("<div id='me' class='someClass someOtherClass'></div>");
         
-        DOM('#me').toggleClass('someClass');
+        $('#me').toggleClass('someClass');
         
         equal(byId('me').className, 'someOtherClass');
     });
     test('Should remove class name from dom element when second parameter (assign) is false', function () {
         givenMarkup("<div id='me' class='someClass'></div>");
-        DOM('#me').toggleClass('someClass', false);
-        DOM('#me').toggleClass('otherClass', false);
+        $('#me').toggleClass('someClass', false);
+        $('#me').toggleClass('otherClass', false);
         
         equal(byId('me').className, '');
     });
     test('Should add class to dom element when second parameter (assign) is true', function () {
         givenMarkup("<div id='me' class='someClass'></div>");
-        DOM('#me').toggleClass('someClass', true);
-        DOM('#me').toggleClass('otherClass', true);
+        $('#me').toggleClass('someClass', true);
+        $('#me').toggleClass('otherClass', true);
         equal(byId('me').className, 'someClass otherClass');
     });
     
     
-    module("DOM().hasClass(className : string)");
+    module("minQ().hasClass(className : string)");
     test("Should return false if the element does not have the class tested for", function () {
         givenMarkup("<div id='me' class='someClass'/> <div id='me2' class='someClass someOtherClass'/>");
         
-        thenFalse(DOM('#me').hasClass('nope'));
-        thenFalse(DOM('#me2').hasClass('neither'));
+        thenFalse($('#me').hasClass('nope'));
+        thenFalse($('#me2').hasClass('neither'));
     });
     test("Should return true if the element has the class tested for", function () {
         givenMarkup("<div id='me' class='someClass'/> <div id='me2' class='someClass someOtherClass'/>");
                 
-        thenTrue(DOM('#me').hasClass('someClass'));
-        thenTrue(DOM('#me2').hasClass('someClass'));
+        thenTrue($('#me').hasClass('someClass'));
+        thenTrue($('#me2').hasClass('someClass'));
     });
     
     test('Should return false if the element classname is only a partial match of an actual class name on the element', function () {
         givenMarkup('<div id="me" class="partialClass"></div>');
         
-        thenFalse(DOM('#me').hasClass('partial'));
+        thenFalse($('#me').hasClass('partial'));
     });
     
     test('Should return true if any of the matched elements have the class', function () {
@@ -159,10 +159,10 @@
             <div id="me3" class="testClass"></div>'
         );
         
-        thenTrue(DOM('#me,#me2,#me3').hasClass('testClass'));
+        thenTrue($('#me,#me2,#me3').hasClass('testClass'));
     });
     
-    module('DOM().attr(name : string)');
+    module('minQ().attr(name : string)');
     
     test('Should return attribute value from first matched element', function () {
         givenMarkup(
@@ -171,10 +171,10 @@
             <div id="t2" class="test" data-attr-test="second :("></div>'
         );
         
-        equal(DOM('.test').attr('data-attr-test'), 'first!');
+        equal($('.test').attr('data-attr-test'), 'first!');
     });
     
-    module('DOM().attr(name : string, value : string)');
+    module('minQ().attr(name : string, value : string)');
     
     test('Should set attribute value for all matched elements', function () {
         givenMarkup(
@@ -183,13 +183,13 @@
             <div id="t2" class="test"></div>'
         );
         
-        DOM('.test').attr('data-attr', 'testValue');
+        $('.test').attr('data-attr', 'testValue');
 
         equal(byId('t1').getAttribute('data-attr'), 'testValue');
         equal(byId('t2').getAttribute('data-attr'), 'testValue');
     });
     
-    module('DOM().val()');
+    module('minQ().val()');
     
     test('Should return value from first matched element', function () {
         givenMarkup(
@@ -198,10 +198,10 @@
             <input id="t2" class="test" value="second :(" type="text">'
         );
         
-        equal(DOM('.test').val(), 'first!');
+        equal($('.test').val(), 'first!');
     });
     
-    module('DOM().val(value : string)');
+    module('minQ().val(value : string)');
     
     test('Should set input value for all matched elements', function () {
         givenMarkup(
@@ -210,7 +210,7 @@
             <input id="t2" class="test" type="text">'
         );
         
-        DOM('.test').val('1234');
+        $('.test').val('1234');
 
         equal(byId('t1').value, '1234');
         equal(byId('t2').value, '1234');
@@ -218,30 +218,30 @@
     
     // DOM manipulation
     
-    module('DOM().html()');
+    module('minQ().html()');
     
     test('Should return markup from first matched element', function () {
         givenMarkup('<div id="t1" class="html">first</div> <div id="t2" class="html">second</div>');
-        equal(DOM(".html").html(), 'first');
+        equal($(".html").html(), 'first');
     });
     
     test('Should return null if no matched elements', function () {
         givenMarkup('<div id="t1" class="html"/>');
-        equal(DOM(".unknown").html(), null);
+        equal($(".unknown").html(), null);
     });
     
-    module('DOM().html(html)');
+    module('minQ().html(html)');
     
     test('Should set innerHTML of all matched elements', function () {
         givenMarkup('<div id="t1" class="html"></div> <div id="t2" class="html"></div>');
         
-        DOM(".html").html('hypertext markup language');
+        $(".html").html('hypertext markup language');
         
         equal(byId('t1').innerHTML, 'hypertext markup language');
         equal(byId('t2').innerHTML, 'hypertext markup language');
     });
     
-    module('DOM().append(html : string)');
+    module('minQ().append(html : string)');
 
     test('Should add markup to end of matched elements', function () {
         givenMarkup(
@@ -250,7 +250,7 @@
             <div id="t2" class="html">test2</div>'
         );
 
-        DOM('.html').append('<a>link</a>');
+        $('.html').append('<a>link</a>');
 
         equal(byId('t1').innerHTML.toLowerCase(), 'test1<a>link</a>');
         equal(byId('t2').innerHTML.toLowerCase(), 'test2<a>link</a>');
@@ -264,14 +264,14 @@
             </div>'
         );
         
-        var childElement = DOM('#handle');
-        DOM('.html').append('<a>link</a>');
+        var childElement = $('#handle');
+        $('.html').append('<a>link</a>');
         childElement.html('it worked!');
 
         equal(byId('handle').innerHTML, 'it worked!');
     });
     
-    module('DOM().prepend(html : string)');
+    module('minQ().prepend(html : string)');
 
     test('Should add markup to beginning of matched elements', function () {
         givenMarkup(
@@ -280,7 +280,7 @@
             <div id="t2" class="html">test2</div>'
         );
 
-        DOM('.html').prepend('<a>link</a>');
+        $('.html').prepend('<a>link</a>');
 
         equal(byId('t1').innerHTML.toLowerCase(), '<a>link</a>test1');
         equal(byId('t2').innerHTML.toLowerCase(), '<a>link</a>test2');
@@ -294,8 +294,8 @@
             </div>'
         );
 
-        var childElement = DOM('#handle');
-        DOM('.html').prepend('<a>link</a>');
+        var childElement = $('#handle');
+        $('.html').prepend('<a>link</a>');
         childElement.html('it worked!');
 
         equal(byId('handle').innerHTML, 'it worked!');
@@ -303,7 +303,7 @@
     
     /// DOM Traversal
     
-    module('DOM().find(selector : string)');
+    module('minQ().find(selector : string)');
     
     test('Should evaluate selector with document as root of search', function () {
         givenMarkup(
@@ -326,7 +326,7 @@
             </ul>'
         );
 
-        deepEqual(DOM(document).find('ul ul li').get(), [byId('li1-1'), byId('sibling-li1-1')]);
+        deepEqual($(document).find('ul ul li').get(), [byId('li1-1'), byId('sibling-li1-1')]);
     });
 
     test('Should evaluate selector with matches as root of search', function () {
@@ -350,7 +350,7 @@
             </ul>'
         );
 
-        deepEqual(DOM('#parent').find('ul li').get(), [byId('li1-1')]);
+        deepEqual($('#parent').find('ul li').get(), [byId('li1-1')]);
     });
 
     test('Should evaluate selector against all matched elements', function () {
@@ -373,7 +373,7 @@
             </ul>'
         );
 
-        deepEqual(DOM('.ul').find('ul li').get(), [byId('li1-1'), byId('sibling-li1-1')]);
+        deepEqual($('.ul').find('ul li').get(), [byId('li1-1'), byId('sibling-li1-1')]);
     });
 
     test('Should return empty set for unmatched selector', function () {
@@ -396,10 +396,10 @@
             </ul>'
         );
 
-        deepEqual(DOM('.ul').find('ul li a').get(), []);
+        deepEqual($('.ul').find('ul li a').get(), []);
     });
 
-    module('DOM().parent()');
+    module('minQ().parent()');
     
     test('Should return immediate parent element', function () {
         givenMarkup(
@@ -411,8 +411,8 @@
             </div>'
         );
         
-        deepEqual(DOM('#child').parent().get(), [byId('parent')]);
-        deepEqual(DOM('#parent').parent().get(), [byId('grandparent')]);
+        deepEqual($('#child').parent().get(), [byId('parent')]);
+        deepEqual($('#parent').parent().get(), [byId('grandparent')]);
     });
     
     test('Should return immediate parent element for each matched element', function () {
@@ -427,10 +427,10 @@
             <div id="other"/>'
         );
         
-        deepEqual(DOM('.child').parent().get(), [byId('item1'), byId('item2')]);
+        deepEqual($('.child').parent().get(), [byId('item1'), byId('item2')]);
     });
     
-    module('DOM().parent(selector: string)');
+    module('minQ().parent(selector: string)');
     
     test('Should filter out parents that do not match the supplied selector', function () {
         
@@ -447,10 +447,10 @@
             </div>'
         );
         
-        deepEqual(DOM('.child').parent(".match, .anotherMatch").get(), [byId('item2'), byId('item3')]);
+        deepEqual($('.child').parent(".match, .anotherMatch").get(), [byId('item2'), byId('item3')]);
     });
     
-    module('DOM().closest(selector : string)');
+    module('minQ().closest(selector : string)');
     
     test('Should not return any elements if no ancestors match selector', function () {
         givenMarkup(
@@ -465,7 +465,7 @@
             </ul>'
         );
 
-        deepEqual(DOM('#li1-1').closest('menu').get(), []);
+        deepEqual($('#li1-1').closest('menu').get(), []);
     });
     
     test('Should return only current matched element if it matches the selector and a parent matches the selector', function () {
@@ -481,7 +481,7 @@
             </ul>'
         );
 
-        deepEqual(DOM('#li1-1').closest('li').get(), [byId('li1-1')]);
+        deepEqual($('#li1-1').closest('li').get(), [byId('li1-1')]);
     });
 
     test('Should walk up DOM tree to find closest parent that matches the selector', function () {
@@ -497,7 +497,7 @@
             </ul>'
         );
 
-        deepEqual(DOM('#li1-1').closest('.match').get(), [byId('li1')]);
+        deepEqual($('#li1-1').closest('.match').get(), [byId('li1')]);
     });
     
     test('Should evaluate selector for each selected element', function () {
@@ -513,18 +513,18 @@
             </ul>'
         );
 
-        deepEqual(DOM('#li1-1, #li2').closest('.match').get(), [byId('li1'), byId('li2')]);
+        deepEqual($('#li1-1, #li2').closest('.match').get(), [byId('li1'), byId('li2')]);
     });
 
     /// DOM Eventing
-    module('DOM().on(event : string, listener : function(e))');
+    module('minQ().on(event : string, listener : function(e))');
     
     test('Should execute callback when event triggered', function () {
         givenMarkup('<button id="btn"></button>');
         
         var callbackCalled = false;
         
-        DOM('#btn').on('click', function () { callbackCalled = true; });
+        $('#btn').on('click', function () { callbackCalled = true; });
         
         fireEvent(byId('btn'), 'click');
        
@@ -541,8 +541,8 @@
         
         var callbackCalled = false;
         
-        DOM('#btn').on('click', function () { return false; });
-        DOM('#parent').on('click', function () { callbackCalled = true; });
+        $('#btn').on('click', function () { return false; });
+        $('#parent').on('click', function () { callbackCalled = true; });
                 
         fireEvent(byId('btn'), 'click');
        
@@ -559,15 +559,15 @@
         
         var callbackCalled = false;
         
-        DOM('#btn').on('click', function (e) { e.stopPropagation(); });
-        DOM('#parent').on('click', function () { callbackCalled = true; });
+        $('#btn').on('click', function (e) { e.stopPropagation(); });
+        $('#parent').on('click', function () { callbackCalled = true; });
         
         fireEvent(byId('btn'), 'click');
        
         thenFalse(callbackCalled, 'event should not be propagated');
     });
     
-    module('DOM().on(event : string, selector : string, listener : function(e))');
+    module('minQ().on(event : string, selector : string, listener : function(e))');
     
     test('Should only execute callback if target or parents match given selector', function () {
         givenMarkup(
@@ -582,7 +582,7 @@
         
         var callbackCalled = false;
         
-        DOM('#parent').on('click', 'button', function () { callbackCalled = true; });
+        $('#parent').on('click', 'button', function () { callbackCalled = true; });
                 
         fireEvent(byId('nested'), 'click');
         thenTrue(callbackCalled);
@@ -612,7 +612,7 @@
         
         var thisContext = null;
         
-        DOM('#parent').on('click', 'button', function () { thisContext = this; });
+        $('#parent').on('click', 'button', function () { thisContext = this; });
                 
         fireEvent(byId('nested'), 'click');
         equal(thisContext, byId('btn'));
@@ -622,4 +622,4 @@
         equal(thisContext, byId('btn'));
     });
     
-}(document, module, test, ok, equal, DOM));
+}(document, module, test, ok, equal, minQ));

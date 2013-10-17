@@ -1,4 +1,4 @@
-minion.js
+minQ.js
 =========
 
 A tiny DOM library with a familiar API.
@@ -8,7 +8,8 @@ A tiny DOM library with a familiar API.
 # Script inclusion
 
 ```html
-<script
+<!--[if lt IE 8]><script type="text/javascript" src="../qwery.min.js"></script><![endif]-->
+<script type="text/javascript" src="../minQ.js"></script>
 ```
 
 # jQuery is awesome
@@ -31,11 +32,11 @@ It likely works in all modern browsers.
 
 ## querySelectorAll in IE7
 
-This library depends on Dustin Diaz's great qwery library for IE7 DOM query support. It only gets downloaded for IE7 users
+This library depends on Dustin Diaz's great qwery library for IE7 DOM query support. It only gets downloaded for IE7 users via conditional comments.
 
 ## The API
 
-Minion object construction.
+minQ object construction.
 Chaining
 
 .addClass(className : string)

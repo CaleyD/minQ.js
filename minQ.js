@@ -1,6 +1,6 @@
 /*globals document, window, qwery */
 
-var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, undefined, elem, i) {
+var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, undefined, elem, i) {
     'use strict';
 
     function indexOf(array, value) {
@@ -17,14 +17,14 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
     }
 
     // can be called like:
-    // DOM('#id')
-    // DOM('.selector')leng
-    // DOM(element)
+    // minQ('#id')
+    // minQ('.selector')leng
+    // minQ(element)
 
-    function DOM(selector) {
+    function minQ(selector) {
 
-        if (!(this instanceof DOM)) {
-            return new DOM(selector);
+        if (!(this instanceof minQ)) {
+            return new minQ(selector);
         }
 
         if (typeof selector === 'string') {
@@ -100,7 +100,7 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
         }
     }
 
-    DOM.prototype = {
+    minQ.prototype = {
         /// classList
         addClass: each(updateClassList(function(classes, index, className) {
             ~index || classes.push(className);
@@ -137,15 +137,15 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
         /// DOM traversal
         find: function(selector) {
             if (this.get()[0] === document) {
-                return DOM(selector);
+                return minQ(selector);
             }
             this.addClass(randomHelperClassName);
-            var result = DOM('.' + randomHelperClassName + ' ' + selector);
+            var result = minQ('.' + randomHelperClassName + ' ' + selector);
             this.removeClass(randomHelperClassName);
             return result;
         },
         closest: function(selector) {
-            var matches = DOM(selector).get(),
+            var matches = minQ(selector).get(),
                 results = [];
 
             each(function(elem) {
@@ -157,11 +157,11 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
                 } while (elem = elem[parentElement]);
             }).call(this);
 
-            return DOM(results);
+            return minQ(results);
         },
         parent: function(selector) {
             var results = [],
-                matches = selector ? DOM(selector).get() : null;
+                matches = selector ? minQ(selector).get() : null;
 
             each(function(elem) {
                 if (!matches || ~indexOf(matches, elem[parentElement])) {
@@ -169,7 +169,7 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
                 }
             }).call(this);
 
-            return DOM(results);
+            return minQ(results);
         },
 
         /// updating markup
@@ -184,7 +184,7 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
         // selector is optional
         // capture is optional
         //
-        //      DOM().on(event: string, [selector : string], callback: function(e), [capture : boolean])
+        //      minQ().on(event: string, [selector : string], callback: function(e), [capture : boolean])
         on: each(function(elem, event, selectorFilter, callback, capture) {
             if (typeof selectorFilter === 'function') {
                 // fix parameters
@@ -210,7 +210,7 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
                     e.keyCode = e.charCode;
                 }
 
-                if (!selectorFilter || (elem = DOM(e.target).closest(selectorFilter).get()[0])) {
+                if (!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get()[0])) {
                     if (callback.call(elem, e) === false) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -229,5 +229,5 @@ var DOM = (function(document, randomHelperClassName, tmpDiv, parentElement, unde
         })
     };
 
-    return DOM;
+    return minQ;
 }(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, document.createElement('div'), 'parentElement'));
