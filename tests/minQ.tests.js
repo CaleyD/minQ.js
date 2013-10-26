@@ -62,6 +62,92 @@
         deepEqual(d.get(), [byId('item'), byId('other')]);
     });
 
+    module('minQ().length');
+
+    test('Should count matched elements', function () {
+
+        givenMarkup(
+            '<div id="item" class="test"/>' + 
+            '<div id="other"/>' + 
+            '<div class="test"/>' + 
+            '<div class="test"/>');
+
+        equal(1, $('#item').length);
+        equal(2, $('#item, #other').length);
+        equal(3, $('.test').length);
+        equal(0, $('.noMatch').length);
+    });
+
+    module('minQ().get(index: number)');
+
+    test('Should return element at index', function() {
+        givenMarkup(
+            '<div id="item1" class="items"/>' + 
+            '<div id="item2" class="items"/>' + 
+            '<div id="item3" class="items"/>' + 
+            '<div id="item4" class="items"/>');
+
+	equal(document.getElementById('item1'), $('.items').get(0));
+	equal(document.getElementById('item4'), $('.items').get(3));
+    });
+
+    test('Should return undefined if index out of range of element count', function() {
+        givenMarkup(
+            '<div id="item1" class="items"/>' + 
+            '<div id="item2" class="items"/>');
+
+	strictEqual(undefined, $('.items').get(2));
+    });
+
+    module('minQ().each(callback : function(index:number, elem : node))');
+
+    test('Should execute callback once for each matched element', function() {
+        givenMarkup(
+            '<div id="item1" class="items"/>' + 
+            '<div id="item2" class="items"/>' + 
+            '<div id="item3" class="items"/>' + 
+            '<div id="item4" class="items"/>');
+
+        var callCount = 0;
+
+        $('.items').each(function() { callCount++; });
+
+	equal(4, callCount);
+    });
+
+    test('Should execute callback with the matched element as the "this" context', function () {
+        givenMarkup(
+            '<div id="item1" class="items"/>' + 
+            '<div id="item2" class="items"/>');
+
+        var callCount = 0;
+
+        $('.items').each(function() { this.setAttribute('attr', 'value'); });
+
+	equal('value', document.getElementById('item1').getAttribute('attr'));
+	equal('value', document.getElementById('item2').getAttribute('attr'));
+    });
+
+
+    test('Should pass item index in matched set as first parameter in callback', function () {
+        givenMarkup(
+            '<div id="item1" class="items"/>' + 
+            '<div id="item2" class="items"/>' + 
+            '<div id="item3" class="items"/>');
+
+        var callCount = 0;
+
+        $('.items').each(function(index) { 
+            if(index !== 1) {
+                this.setAttribute('attr', 'value');
+            }
+        });
+
+	equal('value', document.getElementById('item1').getAttribute('attr'));
+	equal(undefined, document.getElementById('item2').getAttribute('attr'));
+	equal('value', document.getElementById('item3').getAttribute('attr'));
+    });
+
     module('minQ().addClass(className : string)');
     
     test('minQ().addClass should add a class to classless element', function () {

@@ -1,6 +1,6 @@
 /*globals document, window, qwery */
 
-var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, undefined, elem, i) {
+var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, undefined, elem, i, index) {
     'use strict';
 
     function indexOf(array, value) {
@@ -44,9 +44,11 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
             }
         }
 
-        this.get = function() {
-            return elements.slice(0);
+        this.get = function(index) {
+            return index===undefined ? elements.slice(0) : elements[index];
         };
+
+	this.length = elements.length;
     }
 
     function updateClassList(fn) {
@@ -60,10 +62,12 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
 
     function each(callback) {
         return function() {
+            index = 0;
             var elems = this.get();
             // apply callback (with called parameters) to each element
             while (elem = elems.shift()) {
                 callback.apply(this, [elem].concat([].slice.call(arguments, 0)));
+                ++index;
             }
 
             return this;
@@ -101,6 +105,9 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
     }
 
     minQ.prototype = {
+
+	each: each(function(elem, callback) { callback.call(elem, index); }),
+
         /// classList
         addClass: each(updateClassList(function(classes, index, className) {
             ~index || classes.push(className);
