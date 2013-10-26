@@ -8,13 +8,14 @@ A tiny DOM library with a familiar API.
 # Script inclusion
 
 ```html
-<!--[if lt IE 8]><script type="text/javascript" src="../qwery.min.js"></script><![endif]-->
-<script type="text/javascript" src="../minQ.js"></script>
+<!--[if lt IE 8]><script type="text/javascript" src="qwery.min.js"></script><![endif]-->
+<script type="text/javascript" src="minQ.js"></script>
 ```
 
 # jQuery is awesome
 
-And it is popular for good reason. However, sometimes just you want a lightweight alternative to allow you to create more succinct DOM code without all of the extra features.
+And it is popular for good reason. However, sometimes you just want a lightweight alternative to allow you to create more succinct DOM code without all of the extra features.
+
 
 ## Encourage scripting behaviors and states, not styles
 
@@ -37,27 +38,66 @@ This library depends on Dustin Diaz's great qwery library for IE7 DOM query supp
 ## The API
 
 minQ object construction.
+
 Chaining
 
+### CSS Classes
+
 .addClass(className : string)
+
 .removeClass(className : string)
+
 .toggleClass(className : string, [apply : boolean])
+
 .hasClass(className : string)
 
+### Attributes and Input Values
+
 .attr(name : string, value : string)
+
 .attr(name : string)
+
 .val()
+
 .val(value : string)
 
+### Accessing native objects
+
+.get()
+
+### Traversing
 .closest(selector : string)
+
 .find(selector : string)
+
 .parent()
+
 .parent(selector: string)
 
+### DOM elements manipulation
+
 .html()
+
 .html(html)
+
 .append(html : string)
+
 .prepend(html : string)
 
+### Eventing
+
 .on(event : string, listener : function(e))
+
 .on(event : string, selector : string, listener : function(e))
+
+### Coming soon
+
+.length
+
+.get(index: number)
+
+.each()
+
+.empty()
+
+.remove()
