@@ -41,6 +41,10 @@ minQ object construction.
 
 Chaining
 
+.length
+
+.each(callback: function(index, elem))
+
 ### CSS Classes
 
 .addClass(className : string)
@@ -65,7 +69,10 @@ Chaining
 
 .get()
 
+.get(index: number)
+
 ### Traversing
+
 .closest(selector : string)
 
 .find(selector : string)
@@ -91,12 +98,6 @@ Chaining
 .on(event : string, selector : string, listener : function(e))
 
 ### Coming soon
-
-.length
-
-.get(index: number)
-
-.each()
 
 .empty()
 

@@ -373,8 +373,7 @@
     });
 
     test('Should not destroy and recreate via innerHTML so events and references to existing markup remain intact', function () {
-        givenMarkup(
-            '\
+        givenMarkup('\
             <div id="t1" class="html"> \
                 <a id="handle"></a> \
             </div>'
@@ -387,13 +386,43 @@
         equal(byId('handle').innerHTML, 'it worked!');
     });
     
+    module('minQ().empty()');
+
+    test('Should remove all child elements', function () {
+        givenMarkup('\
+            <div id="t1"> \
+                1 \
+                <a>2</a> \
+                <a>3</a> \
+                4 \
+            </div>'
+        );
+
+        $('#t1').empty();
+
+        equal('', document.getElementById('t1').innerHTML);
+    });
+
+    test('Should remove all child elements from table (innerHTML read only on some elements in IE)', function () {
+        givenMarkup('\
+            <table id="t1"> \
+                <tr><td>1</td></tr> \
+                <tbody><tr><td>2</td></tr></tbody> \
+                <tfoot><tr><td>3</td></tr></tfoot> \
+            </table>'
+        );
+
+        $('#t1').empty();
+
+        equal('', document.getElementById('t1').innerHTML);
+    });
+
     /// DOM Traversal
     
     module('minQ().find(selector : string)');
     
     test('Should evaluate selector with document as root of search', function () {
-        givenMarkup(
-            '\
+        givenMarkup('\
             <ul id="parent"> \
                 <li id="li1"> \
                     <ul> \

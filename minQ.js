@@ -166,6 +166,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
 
             return minQ(results);
         },
+
         parent: function(selector) {
             var results = [],
                 matches = selector ? minQ(selector).get() : null;
@@ -184,6 +185,13 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
         append: each(addChildrenToElement),
         prepend: each(function(elem, markup) {
             addChildrenToElement(elem, markup, true);
+        }),
+        empty: each(function(elem) {
+            minQ(elem.childNodes).remove();
+        }),
+
+        remove: each(function(elem) {
+            elem.parentNode.removeChild(elem);
         }),
 
         /// event handling. 
