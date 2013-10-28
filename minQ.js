@@ -1,6 +1,6 @@
 /*globals document, window, qwery */
 
-var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, undefined, elem, i, index) {
+var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefined, elem, i, index) {
     'use strict';
 
     function indexOf(array, value) {
@@ -161,7 +161,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
                         results.push(elem);
                         return;
                     }
-                } while (elem = elem[parentElement]);
+                } while (elem = elem[parentNode]);
             }).call(this);
 
             return minQ(results);
@@ -172,8 +172,8 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
                 matches = selector ? minQ(selector).get() : null;
 
             each(function(elem) {
-                if (!matches || ~indexOf(matches, elem[parentElement])) {
-                    results.push(elem[parentElement]);
+                if (!matches || ~indexOf(matches, elem[parentNode])) {
+                    results.push(elem[parentNode]);
                 }
             }).call(this);
 
@@ -201,7 +201,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
         //
         //      minQ().on(event: string, [selector : string], callback: function(e), [capture : boolean])
         on: each(function(elem, event, selectorFilter, callback, capture) {
-            if (typeof selectorFilter === 'function') {
+            if (typeof selectorFilter !== 'string') {
                 // fix parameters
                 capture = callback;
                 callback = selectorFilter;
@@ -225,12 +225,10 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
                     e.keyCode = e.charCode;
                 }
 
-                if (!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get()[0])) {
-                    if (callback.call(elem, e) === false) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        //e.cancelBubble = true; // Chrome bug: http://code.google.com/p/chromium/issues/detail?id=162270
-                    }
+                if ((!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get()[0])) &&
+                    callback.call(elem, e) === false) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
             }
             
@@ -245,4 +243,4 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentElement, und
     };
 
     return minQ;
-}(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, document.createElement('div'), 'parentElement'));
+}(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, document.createElement('div'), 'parentNode'));
