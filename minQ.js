@@ -76,7 +76,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
     function first(callback) {
         return function() {
-            return (elem = this.get().shift()) ? callback(elem) : null;
+            return (elem = this.get(0)) ? callback(elem) : null;
         };
     }
 
@@ -143,7 +143,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         /// DOM traversal
         find: function(selector) {
-            if (this.get()[0] === document) {
+            if (this.get(0) === document) {
                 return minQ(selector);
             }
             this.addClass(randomHelperClassName);
@@ -191,7 +191,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         }),
 
         remove: each(function(elem) {
-            elem.parentNode.removeChild(elem);
+            elem[parentNode].removeChild(elem);
         }),
 
         /// event handling. 
@@ -225,7 +225,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
                     e.keyCode = e.charCode;
                 }
 
-                if ((!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get()[0])) &&
+                if ((!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get(0))) &&
                     callback.call(elem, e) === false) {
                     e.preventDefault();
                     e.stopPropagation();
