@@ -4,9 +4,6 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     'use strict';
 
     function indexOf(array, value) {
-        if (array.indexOf) {
-            return array.indexOf(value);
-        }
         // this is actually lastIndexOf - shouldn't matter for the current callers
         var i = array.length - 1;
         
