@@ -6,8 +6,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     function indexOf(array, value) {
         // this is actually lastIndexOf - shouldn't matter for the current callers
         var i = array.length - 1;
-        
-        while (i >= 0 && array[i] !== value) {
+        while (i+1 && array[i] !== value) {
             --i;
         }
         return i;
