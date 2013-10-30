@@ -121,9 +121,9 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         // returns true if any matched elements have the specified class
         hasClass: function(className) {
             var foundClass;
-            each(function(elem) {
-                foundClass = foundClass || ~indexOf(elem.className.split(/\s+/), className);
-            }).call(this);
+            this.each(function() {
+                foundClass = foundClass || ~indexOf(this.className.split(/\s+/), className);
+            });
             return !!foundClass;
         },
 
