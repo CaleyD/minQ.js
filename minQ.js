@@ -51,12 +51,11 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     }
 
     function each(callback) {
-        return function() {
-            index = 0;
+        return function(arg1, arg2, arg3, arg4, arg5) {
+            index = -1;
             // apply callback (with called parameters) to each element
-            while (elem = this.get(index)) {
-                callback.apply(this, [elem].concat([].slice.call(arguments, 0)));
-                ++index;
+            while (elem = this.get(++index)) {
+                callback(elem, arg1, arg2, arg3, arg4, arg5);
             }
 
             return this;
@@ -158,14 +157,15 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         parent: function(selector) {
             var results = [],
-                matches = selector ? minQ(selector).get() : null;
+                elems = this.get();
+            selector = selector ? minQ(selector).get() : null;
 
-            each(function(elem) {
+            while(elem = elems.shift()) {
                 elem = elem[parentNode];
-                if (!matches || ~indexOf(matches, elem)) {
+                if (!selector || ~indexOf(selector, elem)) {
                     results.push(elem);
                 }
-            }).call(this);
+            }
 
             return minQ(results);
         },
