@@ -12,10 +12,9 @@ A tiny DOM library with a familiar API.
 <script type="text/javascript" src="minQ.js"></script>
 ```
 
-# jQuery is awesome
+## jQuery is awesome
 
 And it is popular for good reason. However, sometimes you just want a lightweight alternative to allow you to create more succinct DOM code without all of the extra features.
-
 
 ## Encourage scripting behaviors and states, not styles
 
@@ -41,64 +40,63 @@ minQ object construction.
 
 Chaining
 
-.length
+.length : number
 
-.each(callback: function(index, elem))
+.each(callback: function(index, elem)) : minQ
 
 ### CSS Classes
 
-.addClass(className : string)
+.addClass(className : string) : minQ
 
-.removeClass(className : string)
+.removeClass(className : string) : minQ
 
-.toggleClass(className : string, [apply : boolean])
+.toggleClass(className : string, [apply : boolean]) : minQ
 
-.hasClass(className : string)
+.hasClass(className : string) : boolean
 
 ### Attributes and Input Values
 
-.attr(name : string, value : string)
+.attr(name : string, value : string) : minQ
 
-.attr(name : string)
+.attr(name : string) : string
 
-.val()
+.val() : string
 
-.val(value : string)
+.val(value : string) : minQ
 
 ### Accessing native objects
 
-.get()
+.get() : [HTMLNode]
 
-.get(index: number)
+.get(index: number) : HTMLNode
 
 ### Traversing
 
-.closest(selector : string)
+.closest(selector : string) : minQ
 
-.find(selector : string)
+.find(selector : string) : minQ
 
-.parent()
+.parent() : minQ
 
-.parent(selector: string)
+.parent(selector: string) : minQ
 
 ### DOM elements manipulation
 
-.html()
+.html() : string
 
-.html(html)
+.html(html) : minQ 
 
-.append(html : string)
+.append(html : string) : minQ
 
-.prepend(html : string)
+.prepend(html : string) : minQ
+
+.empty() : minQ
+
+.remove(element : HTMLNode) : minQ
 
 ### Eventing
 
-.on(event : string, listener : function(e))
+.on(event : string, listener : function(e)) : minQ
 
-.on(event : string, selector : string, listener : function(e))
+.on(event : string, selector : string, listener : function(e)) : minQ
 
-### Coming soon
-
-.empty()
-
-.remove()
