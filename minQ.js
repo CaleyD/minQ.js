@@ -141,16 +141,17 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         },
         closest: function(selector) {
             var matches = minQ(selector).get(),
-                results = [];
+                results = [],
+                elems = this.get();
 
-            each(function(elem) {
+            while(elem = elems.shift()) {
                 do {
                     if (~indexOf(matches, elem)) {
                         results.push(elem);
-                        return;
+                        break;
                     }
                 } while (elem = elem[parentNode]);
-            }).call(this);
+            }
 
             return minQ(results);
         },
