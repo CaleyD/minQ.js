@@ -20,12 +20,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     // minQ('#id')
     // minQ('.selector')leng
     // minQ(element)
-
-    function minQ(selector) {
-
-        if (!(this instanceof minQ)) {
-            return new minQ(selector);
-        }
+    function MinQ(selector) {
 
         if (typeof selector === 'string') {
             selector = document.querySelectorAll ? document.querySelectorAll(selector) : qwery(selector);
@@ -104,7 +99,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         }
     }
 
-    minQ.prototype = {
+    MinQ.prototype = {
 
 	each: each(function(elem, callback) { callback.call(elem, index); }),
 
@@ -242,5 +237,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         })
     };
 
-    return minQ;
+    return function minQ(selector) {
+        return new MinQ(selector);
+    }
 }(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, document.createElement('div'), 'parentNode'));
