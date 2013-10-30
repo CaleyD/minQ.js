@@ -33,7 +33,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         // dedupe
         var elements = [];
-        for (i = 0; elem = selector[i]; i++) {
+        for (i = 0; elem = selector[i++];) {
             if (!~indexOf(elements, elem)) {
                 elements.push(elem);
             }
@@ -88,9 +88,8 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
         var originalFirstChild = node.firstChild;
 
         tmpDiv.innerHTML = markup;
-        i = 0;
 
-        while (elem = tmpDiv.children[i++]) {
+        for(i=0; elem = tmpDiv.children[i++];) {
             if (prepend) {
                 node.insertBefore(elem, originalFirstChild);
             } else {
@@ -120,11 +119,12 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         // returns true if any matched elements have the specified class
         hasClass: function(className) {
-            var foundClass;
-            this.each(function() {
-                foundClass = foundClass || ~indexOf(this.className.split(/\s+/), className);
-            });
-            return !!foundClass;
+            for(i=0; elem = this.get(i++);) {
+               if(~indexOf(elem.className.split(/\s+/), className)) {
+                   return true;
+               }
+            }
+            return false;
         },
 
         /// get/set data on elements
@@ -167,8 +167,9 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
                 matches = selector ? minQ(selector).get() : null;
 
             each(function(elem) {
-                if (!matches || ~indexOf(matches, elem[parentNode])) {
-                    results.push(elem[parentNode]);
+                elem = elem[parentNode];
+                if (!matches || ~indexOf(matches, elem)) {
+                    results.push(elem);
                 }
             }).call(this);
 
