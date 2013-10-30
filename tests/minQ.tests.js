@@ -28,25 +28,25 @@
         }
     }
     
-    module("minQ() construction");
+    module('minQ() construction');
     
-    test("Should construct from single node object", function () {
+    test('Should construct from single node object', function () {
         givenMarkup('<div id="myElem"></div>');
         
-        var d = minQ(byId('myElem'));
+        var d = $(byId('myElem'));
         
         deepEqual(d.get(), [byId('myElem')]);
     });
     
-    test("Should construct from single id selector", function () {
+    test('Should construct from single id selector', function () {
         givenMarkup('<div id="item"></div>');
         
-        var d = minQ('#item');
+        var d = $('#item');
         
         deepEqual(d.get(), [byId('item')]);
     });
     
-    test("Should construct from selector returning multiple elements", function () {
+    test('Should construct from selector returning multiple elements', function () {
         givenMarkup('<div id="item"></div><div id="other"/>');
         
         var d = $('#item, #other');
@@ -54,7 +54,7 @@
         deepEqual(d.get(), [byId('item'), byId('other')]);
     });
     
-    test("Should remove duplicates from element array", function () {
+    test('Should remove duplicates from element array', function () {
         givenMarkup('<div id="item"></div><div id="other"/>');
 
         var d = $([byId('item'), byId('item'), byId('item'), byId('other'), byId('other')]);
@@ -173,12 +173,12 @@
 
     module('minQ().removeClass(className : string)');
     test('Should remove class name from dom element with only one class', function () {
-        givenMarkup("<div id='me' class='someClass'></div>");
+        givenMarkup('<div id="me" class="someClass"></div>');
         $('#me').removeClass('someClass');
         equal('', byId('me').className);
     });
     test('Should only remove the specified class from dom element with multiple classes', function () {
-        givenMarkup("<div id='me' class='someClass someOtherClass'></div>");
+        givenMarkup('<div id="me" class="someClass someOtherClass"></div>');
         $('#me').removeClass('someClass');
         equal('someOtherClass', byId('me').className);
     });
@@ -186,46 +186,46 @@
    
     module('minQ().toggleClass(className : string, [apply : boolean])');
     test('Should add class name to dom element', function () {
-        givenMarkup("<div id='me'></div>");
+        givenMarkup('<div id="me"></div>');
         $('#me').toggleClass('someClass');
         equal(byId('me').className, 'someClass');
     });
     test('Should remove class name from dom element', function () {
-        givenMarkup("<div id='me' class='someClass'></div>");
+        givenMarkup('<div id="me" class="someClass"></div>');
         $('#me').toggleClass('someClass');
         equal(byId('me').className, '');
     });
     test('Should only remove the specified class from dom element with multiple classes', function () {
-        givenMarkup("<div id='me' class='someClass someOtherClass'></div>");
+        givenMarkup('<div id="me" class="someClass someOtherClass"></div>');
         
         $('#me').toggleClass('someClass');
         
         equal(byId('me').className, 'someOtherClass');
     });
     test('Should remove class name from dom element when second parameter (assign) is false', function () {
-        givenMarkup("<div id='me' class='someClass'></div>");
+        givenMarkup('<div id="me" class="someClass"></div>');
         $('#me').toggleClass('someClass', false);
         $('#me').toggleClass('otherClass', false);
         
         equal(byId('me').className, '');
     });
     test('Should add class to dom element when second parameter (assign) is true', function () {
-        givenMarkup("<div id='me' class='someClass'></div>");
+        givenMarkup('<div id="me" class="someClass"></div>');
         $('#me').toggleClass('someClass', true);
         $('#me').toggleClass('otherClass', true);
         equal(byId('me').className, 'someClass otherClass');
     });
     
     
-    module("minQ().hasClass(className : string)");
-    test("Should return false if the element does not have the class tested for", function () {
-        givenMarkup("<div id='me' class='someClass'/> <div id='me2' class='someClass someOtherClass'/>");
+    module('minQ().hasClass(className : string)');
+    test('Should return false if the element does not have the class tested for', function () {
+        givenMarkup('<div id="me" class="someClass"/> <div id="me2" class="someClass someOtherClass"/>');
         
         thenFalse($('#me').hasClass('nope'));
         thenFalse($('#me2').hasClass('neither'));
     });
-    test("Should return true if the element has the class tested for", function () {
-        givenMarkup("<div id='me' class='someClass'/> <div id='me2' class='someClass someOtherClass'/>");
+    test('Should return true if the element has the class tested for', function () {
+        givenMarkup('<div id="me" class="someClass"/> <div id="me2" class="someClass someOtherClass"/>');
                 
         thenTrue($('#me').hasClass('someClass'));
         thenTrue($('#me2').hasClass('someClass'));
@@ -308,12 +308,12 @@
     
     test('Should return markup from first matched element', function () {
         givenMarkup('<div id="t1" class="html">first</div> <div id="t2" class="html">second</div>');
-        equal($(".html").html(), 'first');
+        equal($('.html').html(), 'first');
     });
     
     test('Should return null if no matched elements', function () {
         givenMarkup('<div id="t1" class="html"/>');
-        equal($(".unknown").html(), null);
+        equal($('.unknown').html(), null);
     });
     
     module('minQ().html(html)');
@@ -321,7 +321,7 @@
     test('Should set innerHTML of all matched elements', function () {
         givenMarkup('<div id="t1" class="html"></div> <div id="t2" class="html"></div>');
         
-        $(".html").html('hypertext markup language');
+        $('.html').html('hypertext markup language');
         
         equal(byId('t1').innerHTML, 'hypertext markup language');
         equal(byId('t2').innerHTML, 'hypertext markup language');
@@ -562,7 +562,7 @@
             </div>'
         );
         
-        deepEqual($('.child').parent(".match, .anotherMatch").get(), [byId('item2'), byId('item3')]);
+        deepEqual($('.child').parent('.match, .anotherMatch').get(), [byId('item2'), byId('item3')]);
     });
     
     module('minQ().closest(selector : string)');
