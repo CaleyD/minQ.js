@@ -44,9 +44,8 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
     function updateClassList(fn) {
         return function(self, className) {
-            var classes = self.className.split(/\s+/),
-                index = indexOf(classes, className);
-            fn(classes, index, className);
+            var classes = self.className.split(/\s+/);
+            fn(classes, indexOf(classes, className), className);
             self.className = classes.join(' ').replace(/^\s+/g, ''); // join array and remove leading ' '
         };
     }
@@ -54,9 +53,8 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     function each(callback) {
         return function() {
             index = 0;
-            var elems = this.get();
             // apply callback (with called parameters) to each element
-            while (elem = elems.shift()) {
+            while (elem = this.get(index)) {
                 callback.apply(this, [elem].concat([].slice.call(arguments, 0)));
                 ++index;
             }
