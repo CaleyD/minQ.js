@@ -248,6 +248,19 @@
         thenTrue($('#me,#me2,#me3').hasClass('testClass'));
     });
     
+    test('Should handle SVG className property', function () {
+        givenMarkup(
+            '\
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"> \
+                <circle cx="100" cy="50" r="40" id="myFirstCircle" class="testClass"/> \
+                <circle cx="100" cy="50" r="40" id="mySecondCircle" /> \
+            </svg>'
+        );
+        
+        thenTrue($('#myFirstCircle').hasClass('testClass'));
+        thenFalse($('#mySecondCircle').hasClass('testClass'));
+    });
+
     module('minQ().attr(name : string)');
     
     test('Should return attribute value from first matched element', function () {

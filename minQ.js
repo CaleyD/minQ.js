@@ -43,9 +43,14 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
         this.length = elements.length;
     }
 
+    function getClassesAsArray(element) {
+        var elemClassName = element.className;
+        return (elemClassName && elemClassName.baseVal !== undefined ? elemClassName.baseVal : elemClassName).split(/\s+/);
+    }
+    
     function updateClassList(fn) {
         return function (self, className) {
-            var classes = self.className.split(/\s+/);
+            var classes = getClassesAsArray(self);
             fn(classes, indexOf(classes, className), className);
             self.className = classes.join(' ').replace(/^\s+/g, ''); // join array and remove leading ' '
         };
@@ -94,7 +99,7 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
 
     MinQ.prototype = {
 
-	each: each(function(elem, callback) { callback.call(elem, index); }),
+        each: each(function(elem, callback) { callback.call(elem, index); }),
 
         /// classList
         addClass: each(updateClassList(function(classes, index, className) {
@@ -114,9 +119,9 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
         // returns true if any matched elements have the specified class
         hasClass: function(className) {
             for(i=0; elem = this.get(i++);) {
-               if(~indexOf(elem.className.split(/\s+/), className)) {
-                   return true;
-               }
+                if(~indexOf(getClassesAsArray(elem), className)) {
+                    return true;
+                }
             }
             return false;
         },
