@@ -44,8 +44,8 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
     }
 
     function getClassesAsArray(element) {
-        var elemClassName = element.className;
-        return (elemClassName && elemClassName.baseVal !== undefined ? elemClassName.baseVal : elemClassName).split(/\s+/);
+        element = element.className; // overloading element as className to shave off some bytes
+        return ((element && element.baseVal || element)+'').split(/\s+/);
     }
     
     function updateClassList(fn) {
