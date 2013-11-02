@@ -1,12 +1,13 @@
 /*globals document, window, qwery */
+/*jslint plusplus: true, vars: true, browser: true */
 
-var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefined, elem, i, index) {
+var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undefined, elem, i, index) {
     'use strict';
 
     function indexOf(array, value) {
         // this is actually lastIndexOf - shouldn't matter for the current callers
         var i = array.length - 1;
-        while (i+1 && array[i] !== value) {
+        while (i + 1 && array[i] !== value) {
             --i;
         }
         return i;
@@ -29,21 +30,21 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         // dedupe
         var elements = [];
-        for (i = 0; elem = selector[i++];) {
+        for (i = 0; elem = selector[i++]; ) {
             if (!~indexOf(elements, elem)) {
                 elements.push(elem);
             }
         }
 
-        this.get = function(index) {
-            return index===undefined ? elements.slice(0) : elements[index];
+        this.get = function (index) {
+            return index === undefined ? elements.slice(0) : elements[index];
         };
 
-	this.length = elements.length;
+        this.length = elements.length;
     }
 
     function updateClassList(fn) {
-        return function(self, className) {
+        return function (self, className) {
             var classes = self.className.split(/\s+/);
             fn(classes, indexOf(classes, className), className);
             self.className = classes.join(' ').replace(/^\s+/g, ''); // join array and remove leading ' '
@@ -51,7 +52,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     }
 
     function each(callback) {
-        return function(arg1, arg2, arg3, arg4, arg5) {
+        return function (arg1, arg2, arg3, arg4, arg5) {
             index = -1;
             // apply callback (with called parameters) to each element
             while (elem = this.get(++index)) {
@@ -63,16 +64,16 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
     }
 
     function first(callback) {
-        return function() {
+        return function () {
             return (elem = this.get(0)) ? callback(elem) : null;
         };
     }
 
     function getOrSetAttribute(attributName) {
-        return function(value) {
+        return function (value) {
             return (value === undefined ?
-                first(function(elem) { return elem[attributName]; }) :
-                each(function(elem) { elem[attributName] = value; })
+                    first(function (elem) { return elem[attributName]; }) :
+                    each(function (elem) { elem[attributName] = value; })
             ).call(this);
         };
     }
@@ -82,7 +83,7 @@ var minQ = (function(document, randomHelperClassName, tmpDiv, parentNode, undefi
 
         tmpDiv.innerHTML = markup;
 
-        for(i=0; elem = tmpDiv.children[i++];) {
+        for (i = 0; elem = tmpDiv.children[i++];) {
             if (prepend) {
                 node.insertBefore(elem, originalFirstChild);
             } else {
