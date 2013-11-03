@@ -1,5 +1,6 @@
 /*globals document, window, qwery */
 /*jslint plusplus: true, vars: true, browser: true, bitwise: true*/
+/*jshint boss: true*/
 
 var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
     'use strict';

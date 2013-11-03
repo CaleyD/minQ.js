@@ -1,4 +1,5 @@
-/*jslint es5:true, plusplus:true */
+/*jslint plusplus:true */
+/*jshint multistr: true */
 /*globals document, module, test, ok, equal, strictEqual, deepEqual, minQ*/
 (function (document, module, test, ok, equal, $) {
     'use strict';
