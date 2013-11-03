@@ -1,7 +1,7 @@
 /*globals document, window, qwery */
 /*jslint plusplus: true, vars: true, browser: true */
 
-var minQ = (function (document, randomHelperClassName, parentNode, undefined, elem, i) {
+var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
     'use strict';
 
     function indexOf(array, value) {
@@ -29,8 +29,8 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
         }
 
         // dedupe
-        var elements = [];
-        for (i = 0; elem = selector[i++]; ) {
+        var elements = [], i = 0, elem;
+        while (elem = selector[i++]) {
             if (!~indexOf(elements, elem)) {
                 elements.push(elem);
             }
@@ -45,7 +45,7 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
     function getClassesAsArray(element) {
         element = element.className; // overloading element as className to shave off some bytes
-        return ((element && element.baseVal || element)+'').split(/\s+/);
+        return ((element && element.baseVal || element) + '').split(/\s+/);
     }
     
     function updateClassList(fn) {
@@ -58,9 +58,9 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
     function each(callback) {
         return function (arg1, arg2, arg3, arg4, arg5) {
-            var i = -1;
+            var i = 0, elem;
             // apply callback (with called parameters) to each element
-            while (elem = this.get(++i)) {
+            while (elem = this.get(i++)) {
                 callback(elem, arg1, arg2, arg3, arg4, arg5);
             }
             return this;
@@ -69,7 +69,7 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
     function first(callback) {
         return function () {
-            return (elem = this.get(0)) ? callback(elem) : null;
+            return this.length ? callback(this.get(0)) : null;
         };
     }
 
@@ -85,7 +85,8 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
     function addChildrenToElement(node, markup, prepend) {
         var originalFirstChild = node.firstChild, 
             i = 0, 
-            tmpDiv = document.createElement('div');
+            tmpDiv = document.createElement('div'),
+            elem;
 
         if(node.tagName === 'TBODY') {
             // special case for IE (readonly innerHTML) and other (can't add TR to DIV)
@@ -130,7 +131,9 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
         // returns true if any matched elements have the specified class
         hasClass: function(className) {
-            for(i=0; elem = this.get(i++);) {
+            var i = 0, 
+                elem;
+            while (elem = this.get(i++)) {
                 if(~indexOf(getClassesAsArray(elem), className)) {
                     return true;
                 }
@@ -160,7 +163,8 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
         closest: function(selector) {
             var matches = minQ(selector).get(),
                 results = [],
-                elems = this.get();
+                elems = this.get(),
+                elem;
 
             while(elem = elems.shift()) {
                 do {
@@ -176,7 +180,8 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
         parent: function(selector) {
             var results = [],
-                elems = this.get();
+                elems = this.get(),
+                elem;
             selector = selector ? minQ(selector).get() : null;
 
             while(elem = elems.shift()) {
