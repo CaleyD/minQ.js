@@ -28,6 +28,10 @@
         }
     }
     
+    function normalizeMarkup(markup) {
+        return markup.replace(/(\r\n|\n|\r| )/gm, '').toLowerCase();
+    }
+    
     module('minQ() construction');
     
     test('Should construct from single node object', function () {
@@ -374,6 +378,27 @@
         childElement.html('it worked!');
 
         equal(byId('handle').innerHTML, 'it worked!');
+    });
+    
+    // tbody special case because innerHTML poses problems in IE 
+    // and tr, td, tbody elements cant just be nested in DIV to convert to HTML nodes.
+    test('Should append row to tbody', function () {
+        givenMarkup(
+            '   <table id="t1"> \
+                    <tr><td>1</td></tr> \
+                    <tr><td>2</td></tr> \
+                </table>'
+        );
+
+        $('#t1 tbody').append('<tr><td>3</td></tr>');
+
+        equal(normalizeMarkup($("#t1 tbody").html()),
+              normalizeMarkup(
+                ' <tr><td>1</td></tr> \
+                  <tr><td>2</td></tr> \
+                  <tr><td>3</td></tr>'
+            )
+            );
     });
     
     module('minQ().prepend(html : string)');

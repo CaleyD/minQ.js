@@ -1,7 +1,7 @@
 /*globals document, window, qwery */
 /*jslint plusplus: true, vars: true, browser: true */
 
-var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undefined, elem, i, index) {
+var minQ = (function (document, randomHelperClassName, parentNode, undefined, elem, i, index) {
     'use strict';
 
     function indexOf(array, value) {
@@ -84,11 +84,19 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
     }
 
     function addChildrenToElement(node, markup, prepend) {
-        var originalFirstChild = node.firstChild;
+        var originalFirstChild = node.firstChild, 
+            i = 0, 
+            tmpDiv = document.createElement('div');
 
-        tmpDiv.innerHTML = markup;
-
-        for (i = 0; elem = tmpDiv.children[i++];) {
+        if(node.tagName === 'TBODY') {
+            // special case for IE (readonly innerHTML) and other (can't add TR to DIV)
+            tmpDiv.innerHTML = '<table><tbody>' + markup + '</tbody></table>';
+            tmpDiv = tmpDiv.childNodes[0].childNodes[0];
+        } else {
+            tmpDiv.innerHTML = markup;
+        }
+        
+        while (elem = tmpDiv.children[i++]) {
             if (prepend) {
                 node.insertBefore(elem, originalFirstChild);
             } else {
@@ -242,4 +250,4 @@ var minQ = (function (document, randomHelperClassName, tmpDiv, parentNode, undef
     return function minQ(selector) {
         return new MinQ(selector);
     }
-}(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, document.createElement('div'), 'parentNode'));
+}(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, 'parentNode'));
