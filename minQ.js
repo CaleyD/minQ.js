@@ -1,5 +1,5 @@
 /*globals document, window, qwery */
-/*jslint plusplus: true, vars: true, browser: true */
+/*jslint plusplus: true, vars: true, browser: true, bitwise: true*/
 
 var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
     'use strict';
@@ -83,12 +83,12 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
     }
 
     function addChildrenToElement(node, markup, prepend) {
-        var originalFirstChild = node.firstChild, 
-            i = 0, 
+        var originalFirstChild = node.firstChild,
+            i = 0,
             tmpDiv = document.createElement('div'),
             elem;
 
-        if(node.tagName === 'TBODY') {
+        if (node.tagName === 'TBODY') {
             // special case for IE (readonly innerHTML) and other (can't add TR to DIV)
             tmpDiv.innerHTML = '<table><tbody>' + markup + '</tbody></table>';
             tmpDiv = tmpDiv.childNodes[0].childNodes[0];
@@ -107,34 +107,34 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
 
     MinQ.prototype = {
 
-        each: function(callback) {
+        each: function (callback) {
             var i = -1, elem;
             while (elem = this.get(++i)) {
-                callback.call(elem, i); 
+                callback.call(elem, i);
             }
         },
 
         /// classList
-        addClass: each(updateClassList(function(classes, index, className) {
+        addClass: each(updateClassList(function (classes, index, className) {
             ~index || classes.push(className);
         })),
-        removeClass: each(updateClassList(function(classes, index) {
+        removeClass: each(updateClassList(function (classes, index) {
             ~index && classes.splice(index, 1);
         })),
-        toggleClass: function(className, apply) {
+        toggleClass: function (className, apply) {
             return apply !== undefined ?
-                this[apply ? 'addClass' : 'removeClass'](className) :
-                each(updateClassList(function(classes, index) {
-                    ~index ? classes.splice(index, 1) : classes.push(className);
-                })).call(this, className);
+                    this[apply ? 'addClass' : 'removeClass'](className) :
+                    each(updateClassList(function (classes, index) {
+                        ~index ? classes.splice(index, 1) : classes.push(className);
+                    })).call(this, className);
         },
 
         // returns true if any matched elements have the specified class
-        hasClass: function(className) {
-            var i = 0, 
+        hasClass: function (className) {
+            var i = 0,
                 elem;
             while (elem = this.get(i++)) {
-                if(~indexOf(getClassesAsArray(elem), className)) {
+                if (~indexOf(getClassesAsArray(elem), className)) {
                     return true;
                 }
             }
@@ -142,16 +142,16 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
         },
 
         /// get/set data on elements
-        attr: function(name, value) {
+        attr: function (name, value) {
             return (value === undefined ?
-                first(function(elem) { return elem.getAttribute(name); }) :
-                each(function(elem) { elem.setAttribute(name, value); })
+                    first(function (elem) { return elem.getAttribute(name); }) :
+                    each(function (elem) { elem.setAttribute(name, value); })
             ).call(this);
         },
         val: getOrSetAttribute('value'),
 
         /// DOM traversal
-        find: function(selector) {
+        find: function (selector) {
             if (this.get(0) === document) {
                 return minQ(selector);
             }
@@ -160,13 +160,13 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
             this.removeClass(randomHelperClassName);
             return result;
         },
-        closest: function(selector) {
+        closest: function (selector) {
             var matches = minQ(selector).get(),
                 results = [],
                 elems = this.get(),
                 elem;
 
-            while(elem = elems.shift()) {
+            while (elem = elems.shift()) {
                 do {
                     if (~indexOf(matches, elem)) {
                         results.push(elem);
@@ -178,13 +178,13 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
             return minQ(results);
         },
 
-        parent: function(selector) {
+        parent: function (selector) {
             var results = [],
                 elems = this.get(),
                 elem;
             selector = selector ? minQ(selector).get() : null;
 
-            while(elem = elems.shift()) {
+            while (elem = elems.shift()) {
                 elem = elem[parentNode];
                 if (!selector || ~indexOf(selector, elem)) {
                     results.push(elem);
@@ -197,14 +197,14 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
         /// updating markup
         html: getOrSetAttribute('innerHTML'),
         append: each(addChildrenToElement),
-        prepend: each(function(elem, markup) {
+        prepend: each(function (elem, markup) {
             addChildrenToElement(elem, markup, true);
         }),
-        empty: each(function(elem) {
+        empty: each(function (elem) {
             minQ(elem.childNodes).remove();
         }),
 
-        remove: each(function(elem) {
+        remove: each(function (elem) {
             elem[parentNode].removeChild(elem);
         }),
 
@@ -214,7 +214,7 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
         // capture is optional
         //
         //      minQ().on(event: string, [selector : string], callback: function(e), [capture : boolean])
-        on: each(function(elem, event, selectorFilter, callback, capture) {
+        on: each(function (elem, event, selectorFilter, callback, capture) {
             if (typeof selectorFilter !== 'string') {
                 // fix parameters
                 capture = callback;
@@ -227,10 +227,10 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
                 // normalize event
                 e = e || window.event;
                 if (!e.preventDefault) {
-                    e.preventDefault = function() {
+                    e.preventDefault = function () {
                         e.returnValue = false;
                     };
-                    e.stopPropagation = function() {
+                    e.stopPropagation = function () {
                         e.cancelBubble = true;
                     };
                     e.target = e.srcElement;
@@ -240,7 +240,7 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
                 }
 
                 if ((!selectorFilter || (elem = minQ(e.target).closest(selectorFilter).get(0))) &&
-                    callback.call(elem, e) === false) {
+                        callback.call(elem, e) === false) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
@@ -258,5 +258,5 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined) {
 
     return function minQ(selector) {
         return new MinQ(selector);
-    }
-}(document, 'J8oPn7s'/* this should be an obscure string that will never collide with an actual CSS classname */, 'parentNode'));
+    };
+}(document, 'J8oPn7s',/* this should be an obscure string that will never collide with an actual CSS classname */ 'parentNode'));
