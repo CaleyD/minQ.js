@@ -1,5 +1,5 @@
-/*jslint es5:true */
-/*globals document, module, test, ok, equal, deepEqual, minQ*/
+/*jslint es5:true, plusplus:true */
+/*globals document, module, test, ok, equal, strictEqual, deepEqual, minQ*/
 (function (document, module, test, ok, equal, $) {
     'use strict';
 
@@ -67,10 +67,11 @@
     test('Should count matched elements', function () {
 
         givenMarkup(
-            '<div id="item" class="test"/>' + 
-            '<div id="other"/>' + 
-            '<div class="test"/>' + 
-            '<div class="test"/>');
+            '<div id="item" class="test"/>' +
+                '<div id="other"/>' +
+                '<div class="test"/>' +
+                '<div class="test"/>'
+        );
 
         equal(1, $('#item').length);
         equal(2, $('#item, #other').length);
@@ -80,72 +81,77 @@
 
     module('minQ().get(index: number)');
 
-    test('Should return element at index', function() {
+    test('Should return element at index', function () {
         givenMarkup(
-            '<div id="item1" class="items"/>' + 
-            '<div id="item2" class="items"/>' + 
-            '<div id="item3" class="items"/>' + 
-            '<div id="item4" class="items"/>');
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>' +
+                '<div id="item3" class="items"/>' +
+                '<div id="item4" class="items"/>'
+        );
 
-	equal(document.getElementById('item1'), $('.items').get(0));
-	equal(document.getElementById('item4'), $('.items').get(3));
+        equal(document.getElementById('item1'), $('.items').get(0));
+        equal(document.getElementById('item4'), $('.items').get(3));
     });
 
-    test('Should return undefined if index out of range of element count', function() {
+    test('Should return undefined if index out of range of element count', function () {
         givenMarkup(
-            '<div id="item1" class="items"/>' + 
-            '<div id="item2" class="items"/>');
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>'
+        );
 
-	strictEqual(undefined, $('.items').get(2));
+        strictEqual(undefined, $('.items').get(2));
     });
 
     module('minQ().each(callback : function(index:number, elem : node))');
 
-    test('Should execute callback once for each matched element', function() {
+    test('Should execute callback once for each matched element', function () {
         givenMarkup(
-            '<div id="item1" class="items"/>' + 
-            '<div id="item2" class="items"/>' + 
-            '<div id="item3" class="items"/>' + 
-            '<div id="item4" class="items"/>');
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>' +
+                '<div id="item3" class="items"/>' +
+                '<div id="item4" class="items"/>'
+        );
 
         var callCount = 0;
 
-        $('.items').each(function() { callCount++; });
+        $('.items').each(function () { callCount++; });
 
-	equal(4, callCount);
+        equal(4, callCount);
     });
 
     test('Should execute callback with the matched element as the "this" context', function () {
         givenMarkup(
-            '<div id="item1" class="items"/>' + 
-            '<div id="item2" class="items"/>');
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>'
+        );
 
         var callCount = 0;
 
-        $('.items').each(function() { this.setAttribute('attr', 'value'); });
+        $('.items').each(function () { this.setAttribute('attr', 'value'); });
 
-	equal('value', document.getElementById('item1').getAttribute('attr'));
-	equal('value', document.getElementById('item2').getAttribute('attr'));
+        equal('value', document.getElementById('item1').getAttribute('attr'));
+        equal('value', document.getElementById('item2').getAttribute('attr'));
     });
 
 
     test('Should pass item index in matched set as first parameter in callback', function () {
         givenMarkup(
-            '<div id="item1" class="items"/>' + 
-            '<div id="item2" class="items"/>' + 
-            '<div id="item3" class="items"/>');
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>' +
+                '<div id="item3" class="items"/>'
+        );
 
         var callCount = 0;
 
-        $('.items').each(function(index) { 
-            if(index !== 1) {
+        $('.items').each(function (index) {
+            if (index !== 1) {
                 this.setAttribute('attr', 'value');
             }
         });
 
-	equal('value', document.getElementById('item1').getAttribute('attr'));
-	equal(undefined, document.getElementById('item2').getAttribute('attr'));
-	equal('value', document.getElementById('item3').getAttribute('attr'));
+        equal('value', document.getElementById('item1').getAttribute('attr'));
+        equal(undefined, document.getElementById('item2').getAttribute('attr'));
+        equal('value', document.getElementById('item3').getAttribute('attr'));
     });
 
     module('minQ().addClass(className : string)');
@@ -386,10 +392,10 @@
     });
 
     test('Should not destroy and recreate via innerHTML so events and references to existing markup remain intact', function () {
-        givenMarkup('\
-            <div id="t1" class="html"> \
-                <a id="handle"></a> \
-            </div>'
+        givenMarkup(
+            '   <div id="t1" class="html"> \
+                    <a id="handle"></a> \
+                </div>'
         );
 
         var childElement = $('#handle');
@@ -402,13 +408,13 @@
     module('minQ().empty()');
 
     test('Should remove all child elements', function () {
-        givenMarkup('\
-            <div id="t1"> \
-                1 \
-                <a>2</a> \
-                <a>3</a> \
-                4 \
-            </div>'
+        givenMarkup(
+            '   <div id="t1"> \
+                    1 \
+                    <a>2</a> \
+                    <a>3</a> \
+                    4 \
+                </div>'
         );
 
         $('#t1').empty();
@@ -417,12 +423,12 @@
     });
 
     test('Should remove all child elements from table (innerHTML read only on some elements in IE)', function () {
-        givenMarkup('\
-            <table id="t1"> \
-                <tr><td>1</td></tr> \
-                <tbody><tr><td>2</td></tr></tbody> \
-                <tfoot><tr><td>3</td></tr></tfoot> \
-            </table>'
+        givenMarkup(
+            '   <table id="t1"> \
+                    <tr><td>1</td></tr> \
+                    <tbody><tr><td>2</td></tr></tbody> \
+                    <tfoot><tr><td>3</td></tr></tfoot> \
+                </table>'
         );
 
         $('#t1').empty();
@@ -435,23 +441,23 @@
     module('minQ().find(selector : string)');
     
     test('Should evaluate selector with document as root of search', function () {
-        givenMarkup('\
-            <ul id="parent"> \
-                <li id="li1"> \
-                    <ul> \
-                        <li id="li1-1"> \
-                    </ul> \
-                </li> \
-                <li id="li2"> \
-            </ul> \
-            <ul id="sibling"> \
-                <li id="sibling-li1"> \
-                    <ul> \
-                        <li id="sibling-li1-1"> \
-                    </ul> \
-                </li> \
-                <li id="sibling-li2"> \
-            </ul>'
+        givenMarkup(
+            '   <ul id="parent"> \
+                    <li id="li1"> \
+                        <ul> \
+                            <li id="li1-1"> \
+                        </ul> \
+                    </li> \
+                    <li id="li2"> \
+                </ul> \
+                <ul id="sibling"> \
+                    <li id="sibling-li1"> \
+                        <ul> \
+                            <li id="sibling-li1-1"> \
+                        </ul> \
+                    </li> \
+                    <li id="sibling-li2"> \
+                </ul>'
         );
 
         deepEqual($(document).find('ul ul li').get(), [byId('li1-1'), byId('sibling-li1-1')]);
