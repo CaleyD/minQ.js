@@ -1,7 +1,7 @@
 /*globals document, window, qwery */
 /*jslint plusplus: true, vars: true, browser: true */
 
-var minQ = (function (document, randomHelperClassName, parentNode, undefined, elem, i, index) {
+var minQ = (function (document, randomHelperClassName, parentNode, undefined, elem, i) {
     'use strict';
 
     function indexOf(array, value) {
@@ -58,12 +58,11 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
     function each(callback) {
         return function (arg1, arg2, arg3, arg4, arg5) {
-            index = -1;
+            var i = -1;
             // apply callback (with called parameters) to each element
-            while (elem = this.get(++index)) {
+            while (elem = this.get(++i)) {
                 callback(elem, arg1, arg2, arg3, arg4, arg5);
             }
-
             return this;
         };
     }
@@ -107,7 +106,12 @@ var minQ = (function (document, randomHelperClassName, parentNode, undefined, el
 
     MinQ.prototype = {
 
-        each: each(function(elem, callback) { callback.call(elem, index); }),
+        each: function(callback) {
+            var i = -1, elem;
+            while (elem = this.get(++i)) {
+                callback.call(elem, i); 
+            }
+        },
 
         /// classList
         addClass: each(updateClassList(function(classes, index, className) {

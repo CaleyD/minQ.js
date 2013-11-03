@@ -137,6 +137,19 @@
         equal('value', document.getElementById('item2').getAttribute('attr'));
     });
 
+    test('Should should allow minQ functions inside callback using "this" context', function () {
+        givenMarkup(
+            '    <div id="item1" class="items"/>' +
+                '<div id="item2" class="items"/>'
+        );
+
+        var callCount = 0;
+
+        $('.items').each(function () { minQ(this).attr('attr', 'value'); });
+
+        equal('value', document.getElementById('item1').getAttribute('attr'), 'item1 attribute value matches test attribute value');
+        equal('value', document.getElementById('item2').getAttribute('attr'), 'item2 attribute value matches test attribute value');
+    });
 
     test('Should pass item index in matched set as first parameter in callback', function () {
         givenMarkup(
